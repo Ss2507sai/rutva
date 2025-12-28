@@ -34,11 +34,8 @@ nav{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  transition:.3s;
 }
-nav.scrolled{
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-}
+nav.scrolled{box-shadow:0 10px 30px rgba(0,0,0,.08)}
 .logo{
   font-size:28px;
   letter-spacing:5px;
@@ -53,58 +50,52 @@ nav.scrolled{
   letter-spacing:2px;
   align-items:center;
 }
-.menu a{position:relative}
 .menu a::after{
   content:"";
-  position:absolute;
-  left:0;
-  bottom:-6px;
+  display:block;
   width:0;
   height:1px;
   background:var(--gold);
   transition:.3s;
 }
 .menu a:hover::after{width:100%}
+.menu svg{stroke:#111;transition:.3s}
+.menu svg:hover{stroke:var(--gold);transform:scale(1.15)}
 
-/* Instagram SVG hover */
-.menu svg{
-  stroke:#111;
-  transition:.3s;
-}
-.menu svg:hover{
-  stroke:var(--gold);
-  transform:scale(1.15);
-}
-
-/* HERO */
+/* HERO SLIDER */
 .hero{
   margin-top:90px;
   min-height:90vh;
+  position:relative;
   display:flex;
   align-items:center;
   justify-content:center;
-  position:relative;
-  color:#fff;
   text-align:center;
-}
-.hero img{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  opacity:.65;
+  color:#fff;
+  overflow:hidden;
 }
 .hero::after{
   content:"";
   position:absolute;
   inset:0;
   background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.75));
+  z-index:1;
+}
+.slide{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transition:opacity 1.5s ease;
+}
+.slide.active{opacity:1}
+.slide img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
 .hero-content{
   position:relative;
   z-index:2;
-  animation:fadeUp 1.2s ease;
 }
 .hero h1{
   font-size:64px;
@@ -121,12 +112,10 @@ nav.scrolled{
   border:1px solid var(--gold);
   padding:14px 44px;
   letter-spacing:3px;
-  transition:.4s;
 }
 .hero a:hover{
   background:var(--gold);
   color:#000;
-  transform:translateY(-2px);
 }
 
 /* SECTIONS */
@@ -139,7 +128,7 @@ section{padding:110px 6%}
   color:var(--brown);
 }
 
-/* COLLECTION GRID */
+/* COLLECTION */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
@@ -216,23 +205,12 @@ section{padding:110px 6%}
   grid-template-columns:1fr 1fr;
   gap:60px;
 }
-.contact-info h3{
-  font-size:26px;
-  letter-spacing:3px;
-  margin-bottom:20px;
-}
 .contact-form input,
 .contact-form textarea{
   width:100%;
   padding:14px;
   margin-bottom:18px;
   border:1px solid #ccc;
-  font-family:'Cormorant Garamond',serif;
-}
-.contact-form input:focus,
-.contact-form textarea:focus{
-  outline:none;
-  border-color:var(--gold);
 }
 .contact-form button{
   width:100%;
@@ -240,7 +218,6 @@ section{padding:110px 6%}
   border:1px solid var(--gold);
   background:transparent;
   letter-spacing:3px;
-  cursor:pointer;
 }
 .contact-form button:hover{
   background:var(--gold);
@@ -251,21 +228,28 @@ section{padding:110px 6%}
 footer{
   background:#111;
   color:#ccc;
-  padding:90px 6%;
+  padding:80px 6%;
   text-align:center;
 }
-.copy{
-  margin-top:20px;
-  font-size:13px;
+
+/* WHATSAPP */
+.whatsapp-float{
+  position:fixed;
+  bottom:25px;
+  right:25px;
+  width:56px;
+  height:56px;
+  background:#25D366;
+  color:#fff;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
+  z-index:999;
 }
 
-/* ANIMATION */
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(40px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-/* RESPONSIVE */
 @media(max-width:768px){
   .hero h1{font-size:42px}
   .categories{grid-template-columns:1fr}
@@ -276,7 +260,6 @@ footer{
 
 <body>
 
-<!-- NAV -->
 <nav id="nav">
   <div class="logo">RUTVA</div>
   <div class="menu">
@@ -286,10 +269,10 @@ footer{
     <a href="#collections">Collections</a>
     <a href="#contact">Contact</a>
 
-    <!-- Instagram SVG -->
-    <a href="https://www.instagram.com/rutvabyhaarekhaaraju/" target="_blank" aria-label="Instagram">
+    <!-- Instagram Icon -->
+    <a href="https://www.instagram.com/rutvabyhaarekhaaraju/" target="_blank">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-           xmlns="http://www.w3.org/2000/svg">
+        xmlns="http://www.w3.org/2000/svg">
         <rect x="2" y="2" width="20" height="20" rx="5" stroke-width="1.5"/>
         <circle cx="12" cy="12" r="5" stroke-width="1.5"/>
         <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
@@ -298,9 +281,12 @@ footer{
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <img src="images/hero-step-into-style.png" alt="Rutva Hero">
+<!-- HERO SLIDER -->
+<section class="hero hero-slider">
+  <div class="slide active"><img src="images/hero-step-into-style.png"></div>
+  <div class="slide"><img src="images/kurta-style.png"></div>
+  <div class="slide"><img src="images/saree-gold.png"></div>
+
   <div class="hero-content">
     <h1>NOT JUST FASHION,<br>A FEELING</h1>
     <p>Where tradition meets contemporary</p>
@@ -308,43 +294,22 @@ footer{
   </div>
 </section>
 
-<!-- COLLECTIONS -->
+<!-- COLLECTION -->
 <section id="collections">
   <h2 class="section-title">FEATURED COLLECTION</h2>
   <div class="grid">
-    <div class="card">
-      <img src="images/kurta-krishna.png">
-      <div class="card-overlay">Krishna Heritage Kurta</div>
-    </div>
-    <div class="card">
-      <img src="images/kurta-standing.png">
-      <div class="card-overlay">Stand Your Ground</div>
-    </div>
-    <div class="card">
-      <img src="images/kurta-style.png">
-      <div class="card-overlay">Step Into Style</div>
-    </div>
-    <div class="card">
-      <img src="images/saree-gold.png">
-      <div class="card-overlay">Kalamkari Signature Saree</div>
-    </div>
-    <div class="card">
-      <img src="images/saree-red.png">
-      <div class="card-overlay">Royal Red Silk Saree</div>
-    </div>
+    <div class="card"><img src="images/kurta-krishna.png"><div class="card-overlay">Krishna Heritage Kurta</div></div>
+    <div class="card"><img src="images/kurta-standing.png"><div class="card-overlay">Stand Your Ground</div></div>
+    <div class="card"><img src="images/kurta-style.png"><div class="card-overlay">Step Into Style</div></div>
+    <div class="card"><img src="images/saree-gold.png"><div class="card-overlay">Kalamkari Signature Saree</div></div>
+    <div class="card"><img src="images/saree-red.png"><div class="card-overlay">Royal Red Silk Saree</div></div>
   </div>
 </section>
 
 <!-- CATEGORIES -->
 <section class="categories">
-  <div class="category">
-    <img src="images/kurta-krishna.png">
-    <span>MEN</span>
-  </div>
-  <div class="category">
-    <img src="images/saree-gold.png">
-    <span>WOMEN</span>
-  </div>
+  <div class="category"><img src="images/kurta-krishna.png"><span>MEN</span></div>
+  <div class="category"><img src="images/saree-gold.png"><span>WOMEN</span></div>
 </section>
 
 <!-- ABOUT -->
@@ -357,15 +322,13 @@ footer{
 <section class="contact" id="contact">
   <h2 class="section-title">CONTACT US</h2>
   <div class="contact-wrap">
-    <div class="contact-info">
-      <h3>Rutva by Haarekhaa Raju</h3>
-      <p>Instagram: <a href="https://www.instagram.com/rutvabyhaarekhaaraju/" target="_blank">@rutvabyhaarekhaaraju</a></p>
-      <p>Phone: <a href="tel:+919999999999">+91 99999 99999</a></p>
+    <div>
+      <p><strong>Instagram:</strong> @rutvabyhaarekhaaraju</p>
+      <p><strong>Phone:</strong> +91 99999 99999</p>
     </div>
     <form class="contact-form" onsubmit="event.preventDefault();alert('Thank you! We will contact you shortly');">
       <input type="text" placeholder="Your Name" required>
       <input type="tel" placeholder="Mobile Number" required>
-      <input type="email" placeholder="Email (optional)">
       <textarea rows="4" placeholder="Your Enquiry" required></textarea>
       <button type="submit">SEND ENQUIRY</button>
     </form>
@@ -373,14 +336,22 @@ footer{
 </section>
 
 <footer>
-  <div class="copy">© 2025 Rutva by Haarekhaa Raju. All rights reserved.</div>
+  © 2025 Rutva by Haarekhaa Raju. All rights reserved.
 </footer>
+
+<a href="https://wa.me/919999999999" class="whatsapp-float" target="_blank">💬</a>
 
 <script>
 const nav=document.getElementById('nav');
-window.addEventListener('scroll',()=>{
-  nav.classList.toggle('scrolled',window.scrollY>40);
-});
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>40));
+
+const slides=document.querySelectorAll('.hero-slider .slide');
+let i=0;
+setInterval(()=>{
+  slides[i].classList.remove('active');
+  i=(i+1)%slides.length;
+  slides[i].classList.add('active');
+},4500);
 </script>
 
 </body>
